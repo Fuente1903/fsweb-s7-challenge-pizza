@@ -1,0 +1,30 @@
+.menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding: 2rem;
+  }
+  
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .menu-item img {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .menu-item p {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #333;
+  }
+  

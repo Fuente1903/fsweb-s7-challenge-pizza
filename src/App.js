@@ -1,5 +1,5 @@
 import React from "react";
-import Anasayfa from "./Anasayfa";
+import Anasayfa from "./Components/Anasayfa";
 
 const App = () => {
   return (
