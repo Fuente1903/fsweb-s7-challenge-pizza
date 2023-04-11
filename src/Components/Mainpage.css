@@ -1,13 +1,17 @@
 .banner {
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 700px;
+    margin: 0;
+    padding: 0;
+    left: 0;
 }
 
 .banner img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+        
 }
 
 .banner-content {
@@ -25,6 +29,7 @@
     margin: 0;
     color: #fff;
     text-shadow: 2px 2px #000;
+    margin-bottom: 70px;
 }
 
 .banner-content p {
@@ -32,6 +37,7 @@
     margin: 0;
     color: #fff;
     text-shadow: 2px 2px #000;
+    margin-bottom: 70px;
 }
 
 .banner-content button {
@@ -45,11 +51,13 @@
     margin-top: 24px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+   border-radius: 5px;
 }
 
 .banner-content button:hover {
     background-color: #000;
     color: #fff;
+    border-radius: 5px;
 }
 
 .banner-baslik {

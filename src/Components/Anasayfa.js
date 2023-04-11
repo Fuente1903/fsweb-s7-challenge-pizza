@@ -3,6 +3,7 @@ import "./Anasayfa.css";
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import Mainpage from "./Mainpage.js"; 
 import { useNavigate } from 'react-router-dom';
+import Banner from "./banner.png";
 
 export default function Anasayfa() {
   return (
@@ -11,13 +12,13 @@ export default function Anasayfa() {
         <Route exact path="/">
           <div className="AnaSayfaContainer">
             <div className="header">
-              <h1>YEMEK DEPOSU</h1>
-              <p>DOLU DOLU DEPO</p>
-              <p>HEMEN SİPARİŞ VER!</p>
-              <Link to="/Mainpage" className="siparis-butonu">TIKLA GELSİN</Link>
+              <h1>Teknolojik Yemekler</h1>
+              <p>KOD ACIKTIRIR</p>
+              <p>PIZZA, DOYURUR</p>
+              <Link to="/Mainpage" className="siparis-butonu">ACIKTIM</Link>
             </div>
             <img className="imageke"
-              src="https://www.tastypizza.ca/static/img-1-1470491652f0d6757b0554096ca10e69.jpg"
+              src={Banner}
               alt="sliderke"
             />
           </div>

@@ -49,9 +49,9 @@ export default function Mainpage() {
               <p>Gorsel 1 Başlık</p>
             </div>
             <div className="gorsel-ozellikler">
-              <span className="gorsel-puan">8.5</span>
-              <span className="gorsel-yorum">12 Yorum</span>
-              <span className="gorsel-fiyat">$10.99</span>
+              <span className="gorsel-puan">4.9</span>
+              <span className="gorsel-yorum">(200)</span>
+              <span className="gorsel-fiyat">60TL</span>
             </div>
           </div>
           <div className="gorsel-kutusu">
@@ -60,9 +60,9 @@ export default function Mainpage() {
               <p>Gorsel 2 Başlık</p>
             </div>
             <div className="gorsel-ozellikler">
-              <span className="gorsel-puan">9.0</span>
-              <span className="gorsel-yorum">5 Yorum</span>
-              <span className="gorsel-fiyat">$12.99</span>
+              <span className="gorsel-puan">4.9</span>
+              <span className="gorsel-yorum">(928)</span>
+              <span className="gorsel-fiyat">85TL</span>
             </div>
           </div>
           <div className="gorsel-kutusu">
@@ -71,9 +71,9 @@ export default function Mainpage() {
               <p>Gorsel 3 Başlık</p>
             </div>
             <div className="gorsel-ozellikler">
-              <span className="gorsel-puan">7.5</span>
-              <span className="gorsel-yorum">8 Yorum</span>
-              <span className="gorsel-fiyat">$8.99</span>
+              <span className="gorsel-puan">4.9</span>
+              <span className="gorsel-yorum">(462)</span>
+              <span className="gorsel-fiyat">75TL</span>
             </div>
           </div>
         </div>

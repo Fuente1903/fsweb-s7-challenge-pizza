@@ -1,10 +1,13 @@
 .menu {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f8f8f8;
-    padding: 2rem;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f8f8;
+  padding: 1rem; /* daha küçük padding */
+  font-size: 0.8rem; /* küçültülmüş font boyutu */
+  margin-bottom: 50px;
+}
+
   
   .menu-item {
     display: flex;
@@ -13,17 +16,17 @@
     align-items: center;
     font-family: Arial, sans-serif;
     text-align: center;
+    font-size: 0.7rem; /* küçültülmüş font boyutu */
   }
   
   .menu-item img {
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: 1rem;
+    width: 2rem; /* küçültülmüş resim boyutu */
+    height: 2rem;
+    margin-bottom: 0.5rem; /* küçültülmüş alt boşluk */
   }
   
   .menu-item p {
     margin: 0;
-    font-size: 0.8rem;
     font-weight: bold;
     color: #333;
   }
