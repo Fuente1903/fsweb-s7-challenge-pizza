@@ -21,7 +21,7 @@ export default function Mainpage() {
           <div className='banner-content'>
               <h2>KOD ACIKTIRIR</h2>
               <p>PIZZA, DOYURUR</p>
-              <Link to="/Form.js" className="siparis-butonu">SİPARİŞ VER</Link>
+              <Link to="/form" className="siparis-butonu">SİPARİŞ VER</Link>
           </div>
           <div className='banner-baslik'>
               <h3>Teknolojik Yemekler</h3>

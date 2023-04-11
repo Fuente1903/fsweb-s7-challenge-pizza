@@ -1,540 +1,376 @@
-import React from "react";
-import "./Order.css";
+import React, { useEffect, useState } from "react";
+import { NavLink, Link } from "react-router-dom";
+import "./Form.css";
 import * as yup from "yup";
-import { useState, useEffect } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
-const formSchema = yup.object().shape({
-    pizzatype: yup.string().required("Seçim yapınız"),
-    pizzasize: yup
-      .string()
-      .oneOf(["small", "medium", "big"], "Boyutlardan birini seçmelisiniz.")
-      .required(),
-    doughsize: yup
-      .string()
-      .oneOf(
-        ["thin", "medium", "thick"],
-        "Hamur boyutlarından birini seçmelisiniz."
-      )
-      .required(),
-    cheddar: yup.boolean().oneOf([true, false], ""),
-    pepper: yup.boolean().oneOf([true, false], ""),
-    tomato: yup.boolean().oneOf([true, false], ""),
-    sucuk: yup.boolean().oneOf([true, false], ""),
-    onion: yup.boolean().oneOf([true, false], ""),
-    chicken: yup.boolean().oneOf([true, false], ""),
-    corn: yup.boolean().oneOf([true, false], ""),
-    pineapple: yup.boolean().oneOf([true, false], ""),
-    courgette: yup.boolean().oneOf([true, false], ""),
-    mushroom: yup.boolean().oneOf([true, false], ""),
-    tuna: yup.boolean().oneOf([true, false], ""),
-    mint: yup.boolean().oneOf([true, false], ""),
-    oregano: yup.boolean().oneOf([true, false], ""),
-    sausage: yup.boolean().oneOf([true, false], ""),
-    ham: yup.boolean().oneOf([true, false], ""),
-    olive: yup.boolean().oneOf([true, false], ""),
-    namesurname: yup
-      .string()
-      .min(2, "İsminiz en az 2 karakterden oluşmalıdır.")
-      .required("İsim alanını doldurmak zorunludur."),
-    address: yup
-      .string()
-      .required("Adres alanını doldurmak zorunludur")
-      .min(10, "En az 10 karakter girilmelidir."),
-    email: yup
-      .string()
-      .email()
-      .required("Geçerli bir email giriniz."),
-    quantity: yup.number().required("Lütfen sipariş adedini girin!"),
-    ordernote: yup.string(),
-  });
-  
-  export default function Form() {
-    const [form, setForm] = useState({
-      pizzatype: "",
-      pizzasize: "",
-      doughsize: "",
-      cheddar: false,
-      pepper: false,
-      tomato: false,
-      sucuk: false,
-      onion: false,
-      chicken: false,
-      corn: false,
-      pineapple: false,
-      courgette: false,
-      mushroom: false,
-      tuna: false,
-      mint: false,
-      oregano: false,
-      sausage: false,
-      ham: false,
-      olive: false,
-      quantity: "",
-      namesurname: "",
-      address: "",
-      email: "",
-      ordernote: "",
-    });
-  
-    const [error, setError] = useState({
-      pizzatype: "",
-      pizzasize: "",
-      doughsize: "",
-      cheddar: false,
-      pepper: false,
-      tomato: false,
-      sucuk: false,
-      onion: false,
-      chicken: false,
-      corn: false,
-      pineapple: false,
-      courgette: false,
-      mushroom: false,
-      tuna: false,
-      mint: false,
-      oregano: false,
-      sausage: false,
-      ham: false,
-      olive: false,
-      quantity: "",
-      namesurname: "",
-      address: "",
-      email: "",
-      ordernote: "",
-    });
-  
-    const [buttonDisabledMi, setButtonDisabledMi] = useState(true);
-    const [alreadyOrdered, setAlreadyOrdered] = useState();
-  
-    const checkFormError = (name, value) => {
-      yup
-        .reach(formSchema, name)
-        .validate(value)
-        .then(() => {
-          setError({
-            ...error,
-            [name]: "",
-          });
-        })
-        .catch((err) => {
-          setError({
-            ...error,
-            [name]: err.message,
-          });
-        });
-    };
-  
-    function handleChange(event) {
-      const { name, value } = event.target;
-      checkFormError(name, value);
-      setForm({
-        ...form,
-        [name]: value,
+import {
+  FormGroup,
+  CardTitle,
+  Card,
+  CardText,
+  ButtonToolbar,
+  ButtonGroup,
+  Button,
+  Input,
+  Label,
+  Col,
+  FormFeedback,
+} from "reactstrap";
+
+const initialValues = {
+  name: "",
+  boyut: "",
+  hamur: "",
+  secenekler: [],
+  instructions: "",
+  adet: 1,
+  ücret: 85.5,
+  ekücret: "",
+  rate: 8.9,
+  comments: 200,
+};
+
+const initialErrors = {
+  name: "",
+  boyut: "",
+  hamur: "",
+  secenekler: [],
+  instructions: "",
+};
+
+const secenekler = [
+  "Pepperoni",
+  "Sosis",
+  "Knada Jambonu",
+  "Tavuk Izgara",
+  "Soğan",
+  "Domates",
+  "Mısır",
+  "Sucuk",
+  "Jalepeno",
+  "Sarımsak",
+  "Biber",
+  "Sucuk",
+  "Ananas",
+  "Kabak",
+];
+
+const Form = () => {
+  const [data, setData] = useState(initialValues);
+  const [malzemeSayısı, setMalzemeSayısı] = useState(0);
+  const [price, setPrice] = useState(data.ücret);
+
+  const [errors, setErrors] = useState(initialErrors);
+  const [disabled, setDisabled] = useState(true);
+  const [submit, setSubmit] = useState(false);
+
+  const [counter, setCounter] = useState(1);
+  const perCost = 5;
+  const ekücret = perCost * malzemeSayısı;
+  const totalPrice = price * counter;
+
+  useEffect(() => {
+    axios
+      .post("https://reqres.in/api/users", initialValues)
+      .then((response) => {
+        console.log(response.data);
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
+  }, []);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setSubmit(true);
+  };
+
+  const kontrol = (e) => {
+    setData({ ...data, [e.target.name]: e.target.checked });
+    if (e.target.checked === true) {
+      setMalzemeSayısı(malzemeSayısı + 1);
+      setPrice(price + perCost);
+    } else {
+      setMalzemeSayısı(malzemeSayısı - 1);
+      setPrice(price - perCost);
     }
-  
-    function handleSubmit(event) {
-      event.preventDefault();
-      axios
-        .post("https://reqres.in/api/users", form)
-        .then((response) => {
-          console.log(response.data);
-          setAlreadyOrdered([...alreadyOrdered, response.data]);
-          setForm({
-            pizzatype: "",
-            pizzasize: "",
-            doughsize: "",
-            cheddar: false,
-            pepper: false,
-            tomato: false,
-            sucuk: false,
-            onion: false,
-            chicken: false,
-            corn: false,
-            pineapple: false,
-            courgette: false,
-            mushroom: false,
-            tuna: false,
-            mint: false,
-            oregano: false,
-            sausage: false,
-            ham: false,
-            olive: false,
-            quantity: "",
-            namesurname: "",
-            address: "",
-            email: "",
-            ordernote: "",
-          });
-        })
-        .catch((err) => console.log(err));
-    }
-  
-    useEffect(() => {
-      formSchema.isValid(form).then((valid) => setButtonDisabledMi(!valid));
-    }, [form]);
-  
-    const history = useHistory();
-    const toSuccessPage = () => {
-      history.push("/success");
-    };
-    return (
-      <>
-        <div className="formPart">
-          <h1 className="formHeading">SİPARİŞİNİZİ OLUŞTURUN</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="formContent">
-              <div className="pizza_type">
-                <h3>
-                  Pizza Çeşitini Seçiniz <span style={{ color: "red" }}>*</span>
-                </h3>
-                <label>
-                  {" "}
-                  <select
-                    id="type_dropdown"
-                    name="pizzatype"
-                    value={form.pizzatype}
-                    onChange={handleChange}
-                    class="select"
-                  >
-                    <option value="">Seçiniz</option>
-                    <option value="margarita">Margarita</option>
-                    <option value="sucuklu">Sucuklu Pizza</option>
-                    <option value="sebzeli">Sebzeli Pizza</option>
-                    <option value="ucpeynirli">Üç Peynirli Pizza</option>
-                    <option value="tavuklu">Tavuklu & Sebzeli Pizza</option>
-                  </select>
-                </label>
-                {error.pizzatype && <p>{error.pizzatype}</p>}
-              </div>
-              <div className="radio">
-                <div className="pizza_size">
-                  <h3>
-                    Pizza Boyutu<span style={{ color: "red" }}>*</span>
-                  </h3>
-                  <label>
-                    <input
-                      type="radio"
-                      value="small"
-                      name="pizzasize"
-                      checked={form.pizzasize === "small"}
-                      onChange={handleChange}
-                    />{" "}
-                    Küçük Boy
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="medium"
-                      name="pizzasize"
-                      checked={form.pizzasize === "medium"}
-                      onChange={handleChange}
-                    />{" "}
-                    Orta Boy
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="big"
-                      name="pizzasize"
-                      checked={form.pizzasize === "big"}
-                      onChange={handleChange}
-                    />{" "}
-                    Büyük Boy
-                  </label>
-                  {error.pizzasize && <p>{error.pizzasize}</p>}
-                </div>
-                <div className="dough_size">
-                  <h3>
-                    Hamur Kalınlığı<span style={{ color: "red" }}>*</span>
-                  </h3>
-  
-                  <label>
-                    <input
-                      type="radio"
-                      value="thin"
-                      name="doughsize"
-                      checked={form.doughsize === "thin"}
-                      onChange={handleChange}
-                    />{" "}
-                    İnce
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="medium"
-                      name="doughsize"
-                      checked={form.doughsize === "medium"}
-                      onChange={handleChange}
-                    />{" "}
-                    Orta
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      value="thick"
-                      name="doughsize"
-                      checked={form.doughsize === "thick"}
-                      onChange={handleChange}
-                    />{" "}
-                    Kalın
-                  </label>
-                  {error.doughsize && <p>{error.doughsize}</p>}
-                </div>
-              </div>
-              <div className="ingredients">
-                <h3 className="headingIngredients">Ek Malzemeleri Seçiniz</h3>
-                <div className="ingredientsContent">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="cheddar"
-                      value={form.cheddar}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Cheddar
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="pepper"
-                      value={form.pepper}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Biber
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="tomato"
-                      value={form.tomato}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Domates
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="sucuk"
-                      value={form.sucuk}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Sucuk
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="onion"
-                      value={form.onion}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Soğan
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="chicken"
-                      value={form.chicken}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Tavuk
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="corn"
-                      value={form.corn}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Mısır
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="pineapple"
-                      value={form.pineapple}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Ananas
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="courgette"
-                      value={form.courgette}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Kabak
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="mushroom"
-                      value={form.mushroom}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Mantar
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="tuna"
-                      value={form.tuna}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Ton
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="mint"
-                      value={form.mint}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Nane
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="oregano"
-                      value={form.oregano}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Kekik
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="sausage"
-                      value={form.sausage}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Sosis
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="ham"
-                      value={form.ham}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Jambon
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="olive"
-                      value={form.olive}
-                      onChange={handleChange}
-                      class="check"
-                    />{" "}
-                    Zeytin
-                  </label>{" "}
-                </div>
-              </div>
-              <div className="quantity">
-                <h3>
-                  Sipariş Adedini Seçiniz <span style={{ color: "red" }}>*</span>
-                </h3>
-                <label>
-                  {" "}
-                  <input
-                    type="number"
-                    name="quantity"
-                    min="1"
-                    max="5"
-                    value={form.quantity}
-                    onChange={handleChange}
-                  />
-                </label>
-                {error.quantity && <p>{error.quantity}</p>}
-              </div>
-              <div className="contact">
-                <h3>
-                  İletişim Bilgilerinizi Giriniz{" "}
-                  <span style={{ color: "red" }}>*</span>
-                </h3>
-  
-                <label>
-                  İsim Soyisim:
-                  <br />
-                  <input
-                    type="text"
-                    name="namesurname"
-                    value={form.namesurname}
-                    onChange={handleChange}
-                    placeholder="İsim Soyisim"
-                  />
-                </label>
-                {error.namesurname && <p>{error.namesurname}</p>}
-  
-                <label>
-                  Adres:
-                  <br />
-                  <input
-                    type="text"
-                    name="address"
-                    value={form.address}
-                    onChange={handleChange}
-                    placeholder="Adres"
-                  />
-                </label>
-                {error.address && <p>{error.address}</p>}
-  
-                <label>
-                  Email:
-                  <br />
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="Email"
-                  />
-                </label>
-                {error.email && <p>{error.email}</p>}
-              </div>
-              <div className="order_note">
-                <h3>Sipariş Notunuzu Giriniz</h3>
-                <label>
-                  <input
-                    type="text"
-                    name="ordernote"
-                    value={form.ordernote}
-                    onChange={handleChange}
-                    placeholder="Sipariş Notunuz"
-                  />
-                </label>
-              </div>
-  
-              <button
-                className="order_button"
-                type="submit"
-                disabled={buttonDisabledMi}
-                onClick={toSuccessPage}
-              >
-                SİPARİŞİ GÖNDER
-              </button>
-            </div>
-          </form>
+  };
+
+  const arttır = (e) => {
+    setCounter(counter + 1);
+  };
+
+  const azalt = (e) => {
+    if (counter >= 1) setCounter(counter - 1);
+    if (counter <= 1) setCounter(1);
+  };
+
+  const schema = yup.object().shape({
+    name: yup
+      .string()
+      .required("bu alanı doldurmak zorunludur.")
+      .min(2, "isim en az 2 karakter olmalıdır")
+      .default(data.name),
+    secenekler: yup
+      .array()
+      .max(10, "En fazla 10 tane seçebilirsiniz.")
+      .default(data.secenekler),
+    instructions: yup
+      .string()
+      .required("bu alanı doldurmak zorunludur.")
+      .default(data.instructions),
+    adet: yup.number().required().default(data.adet),
+    ücret: yup.number().required().default(data.ücret),
+    ekücret: yup.number().required().default(data.ekücret),
+    rate: yup.number().required().default(data.rate),
+    comments: yup.number().required().default(data.comments),
+  });
+
+  const changeHandler = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+
+    yup
+      .reach(schema, e.target.name)
+      .validate(e.target.value)
+      .then((valid) => {
+        setErrors({ ...errors, [e.target.name]: "" });
+      })
+      .catch((err) => {
+        setErrors({ ...errors, [e.target.name]: err.errors[0] });
+      });
+  };
+
+  useEffect(() => {
+    schema.isValid(data).then((valid) => setDisabled(!valid));
+  }, [data, schema]);
+
+  useEffect(() => {
+    setData({ ...data, count: counter });
+  }, [counter]);
+
+  useEffect(() => {
+    setData({
+      ...data,
+      price: price,
+      ekücret: malzemeSayısı * perCost,
+    });
+  }, [totalPrice]);
+
+  useEffect(() => {
+    console.log("errors >", errors);
+  }, [errors]);
+
+  return (
+    <form id="pizza-form" className="form-container" onSubmit={onSubmit}>
+      <div className="navbar">
+        <img className="logo" src="./logo.svg" alt="teknolojik yemekler" />
+        <div className="direction">
+          <NavLink className="links" to="/">
+            Anasayfa
+          </NavLink>
+
+          <NavLink className="secenekler" to="/pizza">
+            Seçenekler
+          </NavLink>
+
+          <NavLink id="order-pizza" className="links" to="/pizza">
+            Sipariş oluştur
+          </NavLink>
         </div>
-      </>
-    );
-  }
+      </div>
+
+      <div className="icerik-container">
+        <h2> Position Absolute Acı Pizza</h2>
+        <div className="pizza-info">
+          <span>{data.ücret} TL</span>
+          <div className="ek">
+            <span>{data.rate}</span>
+            <span>({data.comments})</span>
+          </div>
+        </div>
+        <p>
+          Frontend Dev olarak hala position:absolute kullanıyorsan bu çok acı
+          pizza tam sana göre.Pizza, domates, peynir ve genellikle çeşitli diğer
+          malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir
+          fırında yüksek sıcaklıkta pişirilen, genellikle yuvarlak,
+          düzleştirilmiş mayalı buğday bazlı hamurdan oluşanİtalyan kökenli
+          lezzetli bir yemektir. Küçük bir pizzaya bazen pizetta denir.{" "}
+        </p>
+
+        <FormGroup>
+          <Label htmlFor="name-input">
+            <h3>İsim: </h3>
+          </Label>
+          <Input
+            id="name-input"
+            name="name"
+            placeholder="isim yazınız"
+            type="text"
+            onChange={changeHandler}
+            value={data.name}
+            invalid={errors.name}
+            data-cy="name-input"
+          />
+          <FormFeedback>{errors.name}</FormFeedback>
+        </FormGroup>
+
+        <div className="seçimler">
+          <div className="seçim-1">
+            <Label htmlFor="size-dropdown" sm={2}>
+              <h3>Boy:</h3>
+            </Label>
+
+            <FormGroup check htmlFor="size-dropdown">
+              <Label check>
+                <Input
+                  type="radio"
+                  name="boyut"
+                  id="size-dropdown"
+                  value="Küçük"
+                  data-cy="size-dropdown"
+                  invalid={errors.boyut}
+                  onChange={changeHandler}
+                />{" "}
+                Küçük
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check htmlFor="size-dropdown">
+                <Input
+                  type="radio"
+                  name="boyut"
+                  id="size-dropdown"
+                  value="Orta"
+                  data-cy="size-dropdown"
+                  invalid={errors.boyut}
+                  onChange={changeHandler}
+                />{" "}
+                Orta
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check htmlFor="size-dropdown">
+                <Input
+                  type="radio"
+                  name="boyut"
+                  id="size-dropdown"
+                  value="Büyük"
+                  data-cy="size-dropdown"
+                  invalid={errors.boyut}
+                  onChange={changeHandler}
+                />{" "}
+                Büyük
+              </Label>
+              <FormFeedback>{errors.boyut}</FormFeedback>
+            </FormGroup>
+          </div>
+
+          <FormGroup>
+            <Label htmlFor="dough-dropdown" sm={2}>
+              <h3>Hamur: </h3>
+            </Label>
+            <Col sm={20}>
+              <Input
+                id="dough-dropdown"
+                name="hamur"
+                type="select"
+                placeholder="---Hangi hamur olsun?---"
+                value={data.hamur}
+                onChange={changeHandler}
+                data-cy="dough-dropdown"
+              >
+                <option value="ince">ince</option>
+                <option value="orta">orta</option>
+                <option value="kalın">kalın</option>
+              </Input>
+            </Col>
+            <FormFeedback>{errors.hamur}</FormFeedback>
+          </FormGroup>
+        </div>
+
+        <FormGroup>
+          <h3>Ek Malzemeler:</h3>
+          <p>En Fazla 10 malzeme seçebilirsiniz. 5tl</p>
+
+          {secenekler.map((e, index) => {
+            return (
+              <div key={index} className="checkbox-group">
+                <FormGroup check inline>
+                  <Input type="checkbox" name={e} onChange={kontrol} />
+
+                  <Label check>{e} </Label>
+                  <FormFeedback>{errors.secenekler}</FormFeedback>
+                </FormGroup>
+              </div>
+            );
+          })}
+        </FormGroup>
+
+        <FormGroup>
+          <Label htmlFor="special-text">
+            <h3>Sipariş Notu : </h3>
+          </Label>
+          <Input
+            id="special-text"
+            name="instructions"
+            placeholder="notunuzu yazınız"
+            type="text"
+            onChange={changeHandler}
+            value={data.instructions}
+            invalid={errors.instructions}
+            data-cy="special-text"
+          />
+          <FormFeedback>{errors.instructions}</FormFeedback>
+        </FormGroup>
+
+        <hr style={{ size: "2", border: "solid", width: "100%" }} />
+
+        <div className="sayısal">
+          <ButtonToolbar>
+            <ButtonGroup>
+              <Button onClick={azalt}>-</Button>{" "}
+              <Input id="count" type="number" value={counter} />{" "}
+              <Button onClick={arttır}>+</Button>
+            </ButtonGroup>
+          </ButtonToolbar>
+
+          <div className="seçim-2">
+            <FormGroup>
+              <Card
+                className="my-5"
+                style={{
+                  width: "8rem",
+                }}
+              >
+                <CardTitle>
+                  {" "}
+                  <h4 style={{ marginTop: 0 }}>Sipariş Toplamı</h4>
+                </CardTitle>
+                <CardText>
+                  <h5>Seçimler: {ekücret * counter} TL </h5>
+
+                  <h5>Toplam: {totalPrice} TL </h5>
+                </CardText>
+              </Card>
+
+              <Link to="/Success">
+                <button
+                  id="order-button"
+                  data-cy="order-button"
+                  disabled={disabled}
+                  className="btn btn-primary"
+                >
+                  Sipariş ver!
+                </button>
+              </Link>
+            </FormGroup>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+};
+
+export default Form;
