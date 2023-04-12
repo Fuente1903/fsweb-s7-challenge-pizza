@@ -3,6 +3,7 @@ import { NavLink, Link } from "react-router-dom";
 import "./Form.css";
 import axios from "axios";
 import * as yup from "yup";
+import Footer from "./Footer";
 
 
 import {
@@ -57,7 +58,7 @@ const secenekler = [
   "Kabak",
 ];
 
-const Form = () => {
+const Form = async => {
   const [data, setData] = useState(initialValues);
   const [malzemeSayısı, setMalzemeSayısı] = useState(0);
   const [price, setPrice] = useState(data.ücret);
@@ -111,37 +112,38 @@ const Form = () => {
   const schema = yup.object().shape({
     name: yup
       .string()
-      .required("bu alanı doldurmak zorunludur.")
-      .min(2, "isim en az 2 karakter olmalıdır")
+      .required("Bu alanı doldurmak zorunludur.")
+      .min(2, "İsim en az 2 karakter olmalıdır.")
       .default(data.name),
     secenekler: yup
       .array()
-      .max(10, "En fazla 10 tane seçebilirsiniz.")
+      .max(10, "En fazla 10 adet seçim yapılmaktadır.")
       .default(data.secenekler),
     instructions: yup
       .string()
-      .required("bu alanı doldurmak zorunludur.")
+      .required("Bu alanı doldurmak zorunludur.")
       .default(data.instructions),
     adet: yup.number().required().default(data.adet),
     ücret: yup.number().required().default(data.ücret),
     ekücret: yup.number().required().default(data.ekücret),
     rate: yup.number().required().default(data.rate),
     comments: yup.number().required().default(data.comments),
+    boyut: yup.string().default(data.boyut),
   });
+  
 
-  const changeHandler = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
 
-    yup
-      .reach(schema, e.target.name)
-      .validate(e.target.value)
-      .then((valid) => {
-        setErrors({ ...errors, [e.target.name]: "" });
-      })
-      .catch((err) => {
-        setErrors({ ...errors, [e.target.name]: err.errors[0] });
-      });
+  const changeHandler = async (e) => {
+    try {
+      setData({ ...data, [e.target.name]: e.target.value });
+      await yup.reach(schema, e.target.name).validate(e.target.value);
+      setErrors({ ...errors, [e.target.name]: "" });
+    } catch (err) {
+      setErrors({ ...errors, [e.target.name]: err.errors ? err.errors[0] : "" });
+    }
   };
+  
+  
 
   useEffect(() => {
     schema.isValid(data).then((valid) => setDisabled(!valid));
@@ -166,7 +168,7 @@ const Form = () => {
   return (
     <form id="pizza-form" className="form-container" onSubmit={onSubmit}>
       <div className="navbar">
-        <img className="logo" src="./logo.svg" alt="teknolojik yemekler" />
+        <img className="logo.svg" src="./logo.svg" alt="TEKNOLOJİK YEMEKLER" />
         <div className="direction">
           <NavLink className="links" to="/">
             Anasayfa
@@ -201,19 +203,7 @@ const Form = () => {
         </p>
 
         <FormGroup>
-          <Label htmlFor="name-input">
-            <h3>İsim: </h3>
-          </Label>
-          <Input
-            id="name-input"
-            name="name"
-            placeholder="isim yazınız"
-            type="text"
-            onChange={changeHandler}
-            value={data.name}
-            invalid={errors.name}
-            data-cy="name-input"
-          />
+      
           <FormFeedback>{errors.name}</FormFeedback>
         </FormGroup>
 
@@ -269,31 +259,32 @@ const Form = () => {
           </div>
 
           <FormGroup>
-            <Label htmlFor="dough-dropdown" sm={2}>
-              <h3>Hamur: </h3>
-            </Label>
-            <Col sm={20}>
-              <Input
-                id="dough-dropdown"
-                name="hamur"
-                type="select"
-                placeholder="---Hangi hamur olsun?---"
-                value={data.hamur}
-                onChange={changeHandler}
-                data-cy="dough-dropdown"
-              >
-                <option value="ince">ince</option>
-                <option value="orta">orta</option>
-                <option value="kalın">kalın</option>
-              </Input>
-            </Col>
-            <FormFeedback>{errors.hamur}</FormFeedback>
-          </FormGroup>
+  <Label htmlFor="dough-dropdown" sm={2}>
+    <h3>Hamur: </h3>
+  </Label>
+  <Col sm={20}>
+    <Input
+      id="dough-dropdown"
+      name="hamur"
+      type="select"
+      value={data.hamur}
+      onChange={changeHandler}
+      data-cy="dough-dropdown"
+    >
+      <option value="">Hamur Kalınlığı Seç</option>
+      <option value="ince">ince</option>
+      <option value="orta">orta</option>
+      <option value="kalın">kalın</option>
+    </Input>
+    <FormFeedback>{errors.hamur}</FormFeedback>
+  </Col>
+</FormGroup>
+
         </div>
 
         <FormGroup>
           <h3>Ek Malzemeler:</h3>
-          <p>En Fazla 10 malzeme seçebilirsiniz. 5tl</p>
+          <p>En Fazla 10 malzeme seçebilirsiniz.</p>
 
           {secenekler.map((e, index) => {
             return (
@@ -307,6 +298,24 @@ const Form = () => {
               </div>
             );
           })}
+
+<form>
+  <label>
+    <h3>İsim: </h3>
+    <input
+      name="name"
+      placeholder="Ad-Soyad"
+      type="text"
+      onChange={changeHandler}
+      value={data.name}
+      className={errors.name ? "is-invalid" : ""}
+      data-cy="name-input"
+    />
+    {errors.name && (
+      <div className="invalid-feedback">{errors.name}</div>
+    )}
+  </label>
+</form>
         </FormGroup>
 
         <FormGroup>
@@ -316,14 +325,16 @@ const Form = () => {
           <Input
             id="special-text"
             name="instructions"
-            placeholder="notunuzu yazınız"
+            placeholder="Not"
             type="text"
             onChange={changeHandler}
             value={data.instructions}
             invalid={errors.instructions}
             data-cy="special-text"
+            
           />
           <FormFeedback>{errors.instructions}</FormFeedback>
+          <button type="submit">Gönder</button>
         </FormGroup>
 
         <hr style={{ size: "2", border: "solid", width: "100%" }} />
@@ -356,6 +367,7 @@ const Form = () => {
                 </CardText>
               </Card>
 
+                
               <Link to="/Success">
                 <button
                   id="order-button"
@@ -371,6 +383,8 @@ const Form = () => {
         </div>
       </div>
     </form>
+
+    
   );
 };
 

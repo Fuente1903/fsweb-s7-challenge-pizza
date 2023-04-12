@@ -45,15 +45,15 @@ Sarı #FDC913, Açık Gri: #5F5F5F, Koyu Gri #292929, Kırmızı #CE2829, Bej: #
 
 Bitmiş proje aşağıdaki gereklilikleri içermelidir:
 
-- [ ] Route u "/" olan ve forma linklenen bir anasayfa (button, nav bar, ya da herhangi bir link kabul edilebilir ama id'si "order-pizza" olmalı)
-- [ ] Route u "/pizza" olan bir sipariş formu
-- [ ] Id'si "pizza-form" olan bir form
-- [ ] Id'si "name-input" olan bir isim inputu
-- [ ] İsim için bir doğrulama(validation) ve hata mesajı (İsim en az 2 karakter olmalıdır) (Testlerin geçtiğinden emin olmak için tam olarak bu hata mesajını kullanın) ::: BU HATA MESAJINI KULLANMAK ÇOK ÖNEMLİ (testlere dahil!)
-- [ ] Pizza boyutunun seçilebileceği "size-dropdown" id'li bir dropdown
-- [ ] Malzemeler için bir checklist(checkbox) - en az 4 adet (ipucu: name attributeları farklı olsun!)
-- [ ] Özel seçimler için bir text input "special-text" id'li
-- [ ] "order-button" id'li bir "Sipariş Ver" butonu. Bu buton tıklandığında form gönderilerek girilen bilgileri içerecek bir veritabanı kaydı oluşturulacak
+- [x] Route u "/" olan ve forma linklenen bir anasayfa (button, nav bar, ya da herhangi bir link kabul edilebilir ama id'si "order-pizza" olmalı)
+- [x] Route u "/pizza" olan bir sipariş formu
+- [x] Id'si "pizza-form" olan bir form
+- [x] Id'si "name-input" olan bir isim inputu
+- [x] İsim için bir doğrulama(validation) ve hata mesajı (İsim en az 2 karakter olmalıdır) (Testlerin geçtiğinden emin olmak için tam olarak bu hata mesajını kullanın) ::: BU HATA MESAJINI KULLANMAK ÇOK ÖNEMLİ (testlere dahil!)
+- [x] Pizza boyutunun seçilebileceği "size-dropdown" id'li bir dropdown
+- [x] Malzemeler için bir checklist(checkbox) - en az 4 adet (ipucu: name attributeları farklı olsun!)
+- [x] Özel seçimler için bir text input "special-text" id'li
+- [x] "order-button" id'li bir "Sipariş Ver" butonu. Bu buton tıklandığında form gönderilerek girilen bilgileri içerecek bir veritabanı kaydı oluşturulacak
 
 Not - Form'un payloadu, veri şu şekilde olabilir. Kendiniz de bu yapıyı değiştirebilirsiniz.
 

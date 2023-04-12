@@ -8,6 +8,7 @@ import Form from './Components/Form';
 import ANASAYFA from "./Components/Anasayfa";
 import Anasayfa from "./Components/Anasayfa";
 import SUCCESS from "./Components/Success"
+import Footer from "./Components/Footer";
 
 const App = () => {
   return (

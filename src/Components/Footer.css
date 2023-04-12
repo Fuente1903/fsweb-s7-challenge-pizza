@@ -1,89 +1,61 @@
-.footer {
-    background-color: black;
-    color: white;
-    padding: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .footer-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-right: 50px;
-  }
-  
-  .footer-left h3 {
-    margin-bottom: 20px;
-  }
-  
-  .footer-left p {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .footer-left .icon {
-    margin-right: 10px;
-  }
-  
-  .footer-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .footer-center h3 {
-    margin-bottom: 20px;
-  }
-  
-  .footer-center ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .footer-center li {
-    margin-bottom: 10px;
-  }
-  
-  .footer-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-  
-  .footer-right h3 {
-    margin-bottom: 20px;
-  }
-  
-  .footer-right .instagram {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-  
-  .footer-right img {
-    width: 80px;
-    height: 80px;
-    margin: 5px;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .footer {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .footer-left, .footer-center, .footer-right {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    
-    .footer-left {
-      margin-right: 0;
-    }
-  }
-  
+footer {
+  background-color: rgba(14, 13, 13, 0.938);
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 30px;
+  width: 100%;
+  margin-top: 100px;
+}
+
+.footer-ust {
+  flex-basis: 25%;
+  margin-bottom: 20px;
+}
+
+.footer-orta {
+  flex-basis: 25%;
+  margin-bottom: 20px;
+}
+
+.footer-sag {
+  flex-basis: 25%;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.instagram-kutulari {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.instagram-kutulari img {
+  width: 80px;
+  height: 80px;
+  margin: 5px;
+}
+
+
+.footer-alt {
+  flex-basis: 100%;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.icon-wrapper img {
+  height: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.footer-alt img {
+  height: 1.5rem;
+  margin-left: auto;
+}
+

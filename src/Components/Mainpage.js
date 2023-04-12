@@ -37,7 +37,7 @@ export default function Mainpage() {
       <Gallery />
       <div className='yeni-alan'>
         <div className='yeni-alan-baslik'>
-          <h3>Yeni Alan Başlık</h3>
+          <h3>ACIKTIRAN KODLARA DOYURAN DESTEK</h3>
         </div>
         <div className='yeni-alan-menu'>
           <Menu />
@@ -78,6 +78,7 @@ export default function Mainpage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

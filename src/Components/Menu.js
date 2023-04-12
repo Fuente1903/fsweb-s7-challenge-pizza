@@ -10,12 +10,13 @@ import koreIcon from "./1.png.svg";
 
 export default function Menu() {
   const menuItems = [
+    { title: "YENİ! Kore", icon: koreIcon },
     { title: "Pizza", icon: pizzaIcon },
     { title: "Burger", icon: burgerIcon },
     { title: "Kızartmalar", icon: kizartmaIcon },
     { title: "Fast Food", icon: fastfoodIcon },
     { title: "Gazlı İçecekler", icon: icecekIcon },
-    { title: "YENİ! Kore", icon: koreIcon },
+   
   ];
 
   return (
