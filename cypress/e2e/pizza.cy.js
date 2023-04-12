@@ -1,12 +1,12 @@
 describe('HomePageHeader Test', () => {
     beforeEach(() => {
       
-      cy.visit('http://localhost:3000')
+      cy.visit('http://localhost:3000/Form')
     })
   
     it('Anasayfa Sipariş Formuna Yönlendirme Yapmakta mı', () => {
       
-      cy.get('button').click();
+      cy.visit('anasayfa-butonu').click();
     });
   })
 

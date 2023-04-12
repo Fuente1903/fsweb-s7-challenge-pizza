@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import Mainpage from "./Mainpage.js"; 
 import { useNavigate } from 'react-router-dom';
 import Banner from "./banner.png";
+import Form from "./Form";
 
 export default function Anasayfa() {
   return (
@@ -15,7 +16,10 @@ export default function Anasayfa() {
               <h1>Teknolojik Yemekler</h1>
               <p>KOD ACIKTIRIR</p>
               <p>PIZZA, DOYURUR</p>
-              <Link to="/Mainpage" className="siparis-butonu">ACIKTIM</Link>
+              <Link to="/Form" className="siparis-butonu">SİPARİŞ VER</Link>
+            </div>
+            <div classname="anasayfa-butonu">
+            <Link to="/Mainpage" className="siparis-butonu">ANASAYFA</Link>
             </div>
             <img className="imageke"
               src={Banner}
