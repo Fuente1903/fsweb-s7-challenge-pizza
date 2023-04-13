@@ -21,7 +21,7 @@ export default function Mainpage() {
           <div className='banner-content'>
               <h2>KOD ACIKTIRIR</h2>
               <p>PIZZA, DOYURUR</p>
-              <Link to="/form" className="siparis-butonu">SİPARİŞ VER</Link>
+              <Link to="/form" className="order-pizza">SİPARİŞ VER</Link>
           </div>
           <div className='banner-baslik'>
               <h3>Teknolojik Yemekler</h3>
@@ -37,7 +37,7 @@ export default function Mainpage() {
       <Gallery />
       <div className='yeni-alan'>
         <div className='yeni-alan-baslik'>
-          <h3>ACIKTIRAN KODLARA DOYURAN DESTEK</h3>
+          <h3>ACIKTIRAN KODLARA DOYURAN LEZZETLER</h3>
         </div>
         <div className='yeni-alan-menu'>
           <Menu />
@@ -46,7 +46,7 @@ export default function Mainpage() {
           <div className="gorsel-kutusu">
             <img src={kart1} alt='Gorsel 1' />
             <div className="gorsel-baslik">
-              <p>Gorsel 1 Başlık</p>
+              <p>Terminal Pizza</p>
             </div>
             <div className="gorsel-ozellikler">
               <span className="gorsel-puan">4.9</span>
@@ -57,7 +57,7 @@ export default function Mainpage() {
           <div className="gorsel-kutusu">
             <img src={kart2} alt='Gorsel 2' />
             <div className="gorsel-baslik">
-              <p>Gorsel 2 Başlık</p>
+              <p>Position Absolute Acı Pizza</p>
             </div>
             <div className="gorsel-ozellikler">
               <span className="gorsel-puan">4.9</span>
@@ -68,7 +68,7 @@ export default function Mainpage() {
           <div className="gorsel-kutusu">
             <img src={kart3} alt='Gorsel 3' />
             <div className="gorsel-baslik">
-              <p>Gorsel 3 Başlık</p>
+              <p>useEffect Tavuklu Burger</p>
             </div>
             <div className="gorsel-ozellikler">
               <span className="gorsel-puan">4.9</span>
